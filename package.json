@@ -1,0 +1,31 @@
+{
+   "name":"seedling",
+   "description":"seed data utility for mongoose",
+   "version":"0.0.1",
+   "homepage":"http://github.com/wearefractal/seedling",
+   "repository":"git://github.com/wearefractal/seedling.git",
+   "author":"Fractal <contact@wearefractal.com> (http://wearefractal.com/)",
+   "main":"./index.js",
+   
+   "dependencies":{
+      "coffee-script":"*",
+      "async":"*",
+      "mongoose":"*"
+   },
+   "devDependencies":{
+      "mocha":"*",
+      "should":"*"
+   },
+   "scripts":{
+      "test":"mocha --compilers coffee:coffee-script"
+   },
+   "engines":{
+      "node":">= 0.4.0"
+   },
+   "licenses":[
+      {
+         "type":"MIT",
+         "url":"http://github.com/wearefractal/seedling/raw/master/LICENSE"
+      }
+   ]
+}
