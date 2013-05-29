@@ -14,10 +14,11 @@
    },
    "devDependencies":{
       "mocha":"*",
-      "should":"*"
+      "should":"*",
+      "goosestrap":"*"
    },
    "scripts":{
-      "test":"mocha --compilers coffee:coffee-script"
+      "test":"mocha --compilers coffee:coffee-script --ui exports"
    },
    "engines":{
       "node":">= 0.4.0"

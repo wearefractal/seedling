@@ -4,17 +4,17 @@ async    = require 'async'
 module.exports =
   
   class Seedling
-    constructor: (@models) -> @collection = {}
+    constructor: (@db, @models) -> @collection = {}
 
     clear: (cb) ->
-      async.parallel (m.remove.bind m for _, m of db.models), cb
+      async.parallel (m.remove.bind m for _, m of @db.models), cb
 
     create: (cb) ->
 
       console.log "inserting seed data..."
 
       async.eachSeries Object.keys(@models), (name, done) =>
-        type = db.model name
+        type = @db.model name
         data = @models[name]
         @collection[name] = []
         data = data() if data instanceof Function
