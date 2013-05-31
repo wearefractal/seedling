@@ -11,8 +11,6 @@ module.exports =
 
     create: (cb) ->
 
-      console.log "inserting seed data..."
-
       async.eachSeries Object.keys(@models), (name, done) =>
         type = @db.model name
         data = @models[name]
@@ -29,7 +27,6 @@ module.exports =
    
       , (err) ->
         console.log err if err?
-        console.log "complete."
         cb()
 
     rand: (model) -> @collection[model][Math.floor(Math.random()*@collection[model].length)]
