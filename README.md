@@ -23,44 +23,43 @@
 ## Usage
 
 ```coffee-script
-config = require './config/config'
-goose  = require 'goosestrap'
+goosestrap  = require 'goosestrap'
 
-goose config.db.url, config.paths.models, (err, db) ->
-  should.not.exist err
+db = goosestrap "mongodb://localhost", "./models"
 
-  seed = new seedling db,
+seedData =
+  User: [
+    username: 'admin'
+    id: '1'
+    token: '1'
+    password: 'secret' 
+  ]
 
-    User: [
-      username: 'admin'
-      id: '1'
-      token: '1'
-      password: 'secret' 
-    ]
+  Location: [
+    name: "Scottsdale Fashion Square"
+    coords: 
+      lat: 33.5038 
+      lon: 111.9296
+  ]
 
-    Location: [
-      name: "Scottsdale Fashion Square"
-      coords: 
-        lat: 33.5038 
-        lon: 111.9296
-    ]
+  Movie: -> [
+    name: "Star Trek Into Darkness"
+    date: "5/15/13"
+    # grabs random
+    location: seed.ref 'Location'
+  ,
+    name: "The Iceman"
+    date: "5/15/13"
+    location: seed.ref 'Location'
+  ]
 
-    Movie: -> [
-      name: "Star Trek Into Darkness"
-      date: "5/15/13"
-      # grabs random
-      location: seed.ref 'Location'
-    ,
-      name: "The Iceman"
-      date: "5/15/13"
-      location: seed.ref 'Location'
-    ]
+seed = new seedling db, seedData
 
-  # clear db
-  seed.clear ->
-    # create seed data
-    seed.create (err) ->
-  	  console.log err if err?
+# clear db
+seed.clear ->
+  # create seed data
+  seed.create (err) ->
+	  console.log err if err?
 
 ```
 
