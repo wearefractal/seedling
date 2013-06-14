@@ -3,15 +3,17 @@ should   = require 'should'
 config   = require './config/config'
 goose    = require 'goosestrap'
 
-module.exports = 
+module.exports =
   
   "given a db connection": =>
-
-    goose config.db.url, config.paths.models, (err, @db) =>
-      should.not.exist err
+    @db = goose config.db.url, config.paths.models
 
   "given some seed data": =>
 
+    @preCreateRan = false
+    @preClearRan= false
+    @postCreateRan = false
+    @postClearRan = false
     @seed = new seedling @db,
 
       User: [
@@ -40,11 +42,35 @@ module.exports =
         location: @seed.ref 'Location'
       ]
 
+  "given hooks": =>
+
+    @seed.pre "create", (next) =>
+      @preCreateRan = true
+      next()
+
+    @seed.pre "create", (next) =>
+      @postCreateRan = true
+      next()
+
+    @seed.pre "clear", (next) =>
+      @preClearRan = true
+      next()
+
+    @seed.pre "clear", (next) =>
+      @postClearRan = true
+      next()
+
   "create should run": (done) =>
 
     @seed.create (err) ->
       should.not.exist err
       done()
+  
+  "pre create hook should run": =>
+    @preCreateRan.should.be.ok
+
+  "post create hook should run": =>
+    @postCreateRan.should.be.ok
 
   "seed data should exist": (done) =>
 
@@ -52,20 +78,26 @@ module.exports =
     @Movie    = @db.model 'Movie'
     @Location = @db.model 'Movie'
 
-    @User.find (err, res) ->
+    @User.find (err, res) =>
       should.not.exist err
       res[0].username.should.equal 'admin'
-      done()
 
-    @Movie.find (err, res) ->
-      should.not.exist err
-      res[0].name.should.equal "Star Trek Into Darkness"
-      res[1].name.should.equal "The Iceman"
+      @Movie.find (err, res) ->
+        should.not.exist err
+        res[0].name.should.equal "Star Trek Into Darkness"
+        res[1].name.should.equal "The Iceman"
+        done()
 
-  "clear should delete everything": =>
+  "clear should delete everything": (done) =>
     # cleanup; usually you would call first
     @seed.clear =>
       @User.find (err, res) ->
-        res.should.equal []
+        res.should.be.empty
+        done()
 
+  "pre clear hook should run": =>
+    @preClearRan.should.be.ok
+
+  "post clear hook should run": =>
+    @postClearRan.should.be.ok
 
