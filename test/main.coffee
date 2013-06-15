@@ -4,7 +4,6 @@ config   = require './config/config'
 goose    = require 'goosestrap'
 
 module.exports =
-  
   "given a db connection": =>
     @db = goose config.db.url, config.paths.models
 

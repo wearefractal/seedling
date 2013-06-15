@@ -1,7 +1,7 @@
 {
   "name": "seedling",
   "description": "seed data utility for mongoose",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "http://github.com/wearefractal/seedling",
   "repository": "git://github.com/wearefractal/seedling.git",
   "author": "Fractal <contact@wearefractal.com> (http://wearefractal.com/)",
