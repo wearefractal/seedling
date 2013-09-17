@@ -13,7 +13,7 @@ module.exports =
     clear: (cb) ->
       @runPre "clear", [], (err) =>
         return cb err if err?
-        async.parallel (m.remove.bind m for _, m of @db.models), (err) =>
+        async.parallel (m.remove.bind m for __, m of @db.models), (err) =>
           @runPost "clear", [], cb
 
     create: (cb) ->
@@ -24,7 +24,9 @@ module.exports =
           data = @models[name]
           @collection[name] = []
           data = data() if data instanceof Function
-          async.each data, (model, next) =>
+          async.eachSeries data, (model, next) =>
+            for k, v of model
+              model[k] = v() if v instanceof Function
             type.create model, (err, res) =>
               if err? then console.log "err: #{err}"
               @collection[name].push res
@@ -43,14 +45,14 @@ module.exports =
 
     ref: (model, query) ->
       if query?
-        return _.find(@collection[model], query)._id
+        return (_.find(@collection[model], query))._id
       else
         # just ObjectId
         return @rand(model)._id
 
     embed: (model, query) ->
       if query?
-        return _.find @collection[model], query
+        return (_.find @collection[model], query)
       else
         # randomize
         return @rand(model)
