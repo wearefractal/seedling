@@ -1,6 +1,7 @@
 async    = require 'async'
 {Schema} = require 'mongoose'
 Hookify  = require 'hookify'
+_        = require 'lodash'
 
 module.exports =
   
@@ -40,10 +41,16 @@ module.exports =
 
     rand: (model) -> @collection[model][Math.floor(Math.random()*@collection[model].length)]
 
-    ref: (model) ->
-      # just ObjectId
-      return @rand(model)._id
+    ref: (model, query) ->
+      if query?
+        return _.find(@collection[model], query)._id
+      else
+        # just ObjectId
+        return @rand(model)._id
 
-    embed: (model) ->
-      # randomize
-      return @rand(model)
+    embed: (model, query) ->
+      if query?
+        return _.find @collection[model], query
+      else
+        # randomize
+        return @rand(model)

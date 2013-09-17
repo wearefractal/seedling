@@ -10,7 +10,8 @@
     "coffee-script": "*",
     "async": "*",
     "mongoose": "*",
-    "hookify": "0.0.1"
+    "hookify": "0.0.1",
+    "lodash": "~2.0.0"
   },
   "devDependencies": {
     "mocha": "*",

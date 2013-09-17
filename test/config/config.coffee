@@ -6,4 +6,4 @@ module.exports =
   db:
   	url: process.env.MONGODB or "mongodb://localhost/#{appName}"
   paths:
-    models: path.resolve './test/models'
+    models: path.resolve './test/models/*'

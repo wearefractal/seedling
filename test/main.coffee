@@ -38,7 +38,7 @@ module.exports =
         name: "The Iceman"
         date: "5/15/13"
         imgUrl: "http://api.ning.com/files/ysdCY8Oh2FFFqeGsBQ6Qpeb6eJZ6ytFvsVN2r0QDqPaPnwC9Lu4NQSl6Mcch4lABkVqYrX-jUoZa8xK2ccGDnXbwANQcPvf-/iceman.jpg?size=173&crop=1:1"
-        location: @seed.ref 'Location'
+        location: @seed.ref 'Location', {name: "Scottsdale Fashion Square"}
       ]
 
   "given hooks": =>
