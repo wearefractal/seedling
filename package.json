@@ -19,7 +19,7 @@
     "goosestrap": "*"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --ui exports --reporter spec"
+    "test": "mocha --compilers coffee:coffee-script/register --ui exports --reporter spec"
   },
   "engines": {
     "node": ">= 0.4.0"
