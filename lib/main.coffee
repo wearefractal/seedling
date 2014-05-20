@@ -4,9 +4,9 @@ Hookify  = require 'hookify'
 _        = require 'lodash'
 
 module.exports =
-  
+
   class Seedling extends Hookify
-    constructor: (@db, @models) ->
+    constructor: (@db, @models, @sandbox) ->
       super()
       @collection = {}
 
@@ -23,10 +23,10 @@ module.exports =
           type = @db.model name
           data = @models[name]
           @collection[name] = []
-          data = data() if data instanceof Function
+          data = data(@, @sandbox) if data instanceof Function
           async.eachSeries data, (model, next) =>
             for k, v of model
-              model[k] = v() if v instanceof Function
+              model[k] = v(@, @sandbox) if v instanceof Function
             type.create model, (err, res) =>
               if err? then console.log "err: #{err}"
               @collection[name].push res
@@ -34,7 +34,7 @@ module.exports =
           , (err) ->
             console.log err if err?
             done()
-     
+
         , (err) =>
           console.log err if err?
           @runPost "create", [], (err) ->
