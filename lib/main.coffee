@@ -43,7 +43,10 @@ module.exports =
 
     randCache: []
 
-    rand: (model, {filter, blacklist, allowDupes}) ->
+    rand: (model, opts) ->
+
+      if opts?
+        {filter, blacklist, allowDupes} = opts
 
       list = @collection[model]
 
