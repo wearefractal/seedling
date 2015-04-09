@@ -41,14 +41,51 @@ module.exports =
             console.log err if err?
             cb()
 
-    rand: (model) -> @collection[model][Math.floor(Math.random()*@collection[model].length)]
+    randCache: []
+
+    rand: (model, {filter, blacklist, allowDupes}) ->
+
+      list = @collection[model]
+
+      # DUPLICATES OR NAH
+      if !allowDupes
+        list = list?.filter (item) =>
+          for dupe in @randCache
+            if _.isEqual item, dupe
+              return false
+              break
+          return true
+
+      # USER filter query
+      if filter?
+        list = list?.filter filter
+
+      # BLACKLIST
+      if blacklist?
+        list = list?.filter (item) ->
+          for black in blacklist
+            if item._id is black
+              return false
+              break
+          return true
+
+      # derive item
+      item = list[Math.floor(Math.random()*list?.length)]
+
+      # cache item
+      @randCache.push item
+
+      return item
 
     ref: (model, query) ->
+      result = null
       if query?
-        return (_.find(@collection[model], query))._id
+        result = (_.find(@collection[model], query))?._id
       else
         # just ObjectId
-        return @rand(model)._id
+        result = @rand(model)._id
+
+      return result
 
     embed: (model, query) ->
       if query?
